@@ -1,11 +1,12 @@
 import componentRegistry from 'foremanReact/components/componentRegistry';
-import injectReducer from 'foremanReact/redux/reducers/registerReducer';
-import ForemanTemplates from './ForemanTemplates';
-import templateSyncReducer from './reducer';
+import React from 'react';
+import TemplatesRouter from './Router/TemplatesRouter';
+
+const ForemanTemplates = () => <TemplatesRouter />;
 
 componentRegistry.register({
   name: 'ForemanTemplates',
   type: ForemanTemplates,
 });
 
-injectReducer('foremanTemplates', templateSyncReducer);
+export default ForemanTemplates;

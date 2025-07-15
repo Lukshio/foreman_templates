@@ -1,29 +1,18 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useContext } from 'react';
+import PageLayout from 'foremanReact/routes/common/PageLayout/PageLayout';
+import { translate as __ } from 'foremanReact/common/I18n';
 
-import * as TemplateSyncActions from './NewTemplateSyncActions';
-import NewTemplateSync from './NewTemplateSync';
-import { selectLoadingSettings, selectError } from './NewTemplateSyncSelectors';
-import withProtectedView from '../../withProtectedView';
-import PermissionDenied from '../PermissionDenied';
+import './NewTemplateSync.scss';
+import NewTemplateSyncForm from './components/NewTemplateSyncForm/NewTemplateSyncForm';
+import { TemplateSyncContext } from "../TemplateSyncContext";
 
-const mapStateToProps = state => ({
-  loadingSettings: selectLoadingSettings(state),
-  error: selectError(state),
-});
+export const NewTemplateSync = () => {
+  const { isLoading } = useContext(TemplateSyncContext);
+  return (
+    <PageLayout header={__('Import or Export Templates')} searchable={false}>
+      {!isLoading && <NewTemplateSyncForm />}
+    </PageLayout>
+  );
+};
 
-const permissionList = (
-  <ul className="list-unstyled">
-    <li>import_templates</li>
-    <li>export_templates</li>
-  </ul>
-);
-
-export default withProtectedView(
-  connect(mapStateToProps, TemplateSyncActions)(NewTemplateSync),
-  PermissionDenied,
-  props =>
-    props.userPermissions &&
-    (props.userPermissions.import || props.userPermissions.export),
-  { doc: permissionList }
-);
+export default NewTemplateSync;

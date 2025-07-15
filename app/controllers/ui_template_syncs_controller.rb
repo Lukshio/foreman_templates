@@ -2,9 +2,20 @@ require 'ostruct'
 
 class UITemplateSyncsController < ApplicationController
   include ::Foreman::Controller::Parameters::TemplateParams
+  include ::ApplicationHelper
+  helper :foreman_templates
 
   rescue_from ::ForemanTemplates::PathAccessException do |error|
     render_errors [error.message]
+  end
+
+  def sync_config
+    import_settings = setting_definitions(ForemanTemplates::IMPORT_SETTING_NAMES)
+    export_settings = setting_definitions(ForemanTemplates::EXPORT_SETTING_NAMES)
+    @settings = OpenStruct.new(:import => import_settings, :export => export_settings)
+    @edit_paths = helpers.edit_paths
+
+    render :sync_config
   end
 
   def sync_settings
